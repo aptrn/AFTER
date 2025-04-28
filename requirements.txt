@@ -18,7 +18,6 @@ mir_eval
 resampy
 absl-py
 pedalboard
-librosa
 nn_tilde
 rotary_embedding_torch
 audiomentations

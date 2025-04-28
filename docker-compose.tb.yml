@@ -1,0 +1,10 @@
+services:
+  tensorboard:
+    image: tensorflow/tensorflow:latest
+    container_name: tensorboard
+    command: "tensorboard --logdir=/app/autoencoder_runs --bind_all"
+    volumes:
+      - ./autoencoder_runs:/app/autoencoder_runs:ro
+    ports:
+      - "6006:6006"
+    restart: unless-stopped

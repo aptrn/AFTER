@@ -1,0 +1,26 @@
+services:
+  tensorboard:
+    image: tensorflow/tensorflow:latest
+    container_name: tensorboard
+    command: "tensorboard --logdir=/app/autoencoder_runs --bind_all"
+    volumes:
+      - ./autoencoder_runs:/app/autoencoder_runs:ro
+    ports:
+      - "6006:6006"
+    restart: unless-stopped
+  after:
+    image: python:3.10-slim
+    container_name: after_project
+    command: "tail -f /dev/null"
+    # command: "after prepare_dataset --input_path ./dataset/raw --output_path ./dataset/output --save_waveform True --waveform_augmentation none --gpu 0"
+    # command: "after train_autoencoder --name AE_breaks --db_path ./dataset/output --config baseAE --gpu 0"
+    # command: "after train_autoencoder --name AE_breaks --db_path ./dataset/output --config baseAE --gpu 0 --bsize <YOUR_NEW_BATCH_SIZE> --restart <LATEST_STEP_NUMBER>"
+    volumes:
+      - .:/app
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
